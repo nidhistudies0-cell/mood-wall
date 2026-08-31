@@ -2,10 +2,10 @@ import { useEffect, useState, useCallback } from "react";
 import ComposeBar from "./components/ComposeBar.jsx";
 import PostMoodModal from "./components/PostMoodModal.jsx";
 import Wall from "./components/Wall.jsx";
-import Headline from "./components/Headline.jsx";
+import Timeline from "./components/Timeline.jsx";
 
 const API_BASE = "/api/notes";
-const NOTE_LIFETIME_MS = 2 * 60 * 60 * 1000; // 2 hours
+const NOTE_LIFETIME_MS = 5 * 60 * 60 * 1000; // 5 hours
 
 export default function App() {
   const [notes, setNotes] = useState([]);
@@ -76,16 +76,10 @@ export default function App() {
       <header className="top-nav">
         <div className="top-nav__brand" onClick={() => setViewMode("wall")}>
           <span className="top-nav__logo-icon">⚡</span>
-          <h1 className="top-nav__title">Vibe Check</h1>
+          <h1 className="top-nav__title">Mood Wall</h1>
         </div>
 
         <div className="top-nav__actions">
-          <button
-            className={`top-nav__tab ${viewMode === "wall" ? "top-nav__tab--active" : ""}`}
-            onClick={() => setViewMode("wall")}
-          >
-            Mood Wall
-          </button>
           <button
             className="top-nav__post-btn"
             onClick={() => setIsModalOpen(true)}
@@ -106,7 +100,7 @@ export default function App() {
           </section>
         ) : (
           <>
-            <Headline notes={activeNotes} />
+            <Timeline notes={activeNotes} />
             <Wall notes={activeNotes} onReact={handleReact} loading={loading} />
           </>
         )}

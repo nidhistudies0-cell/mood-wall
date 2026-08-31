@@ -407,69 +407,100 @@ body {
   transform: scale(1.08);
 }
 
-/* Timeline Widget */
-.vibe-timeline {
+/* Multi-Line Area Chart (Mood Frequency Timeline) */
+.vibe-multi-area-card {
   background: #FFFFFF;
   border: 2.5px solid #1A1A1A;
-  border-radius: 20px;
-  padding: 24px;
+  border-radius: 18px;
+  padding: 16px 22px;
+  margin-bottom: 24px;
   box-shadow: var(--shadow-dark);
 }
 
-.vibe-timeline__header {
+.vibe-multi-area-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.vibe-timeline__title {
-  font-size: 0.8rem;
+.vibe-multi-area-header__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vibe-multi-area-eyebrow {
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-}
-
-.vibe-timeline__subtitle {
-  font-size: 0.8rem;
   color: #666;
-  font-weight: 600;
 }
 
-.vibe-timeline__track {
+.vibe-multi-area-title {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  margin: 0;
+  color: #1A1A1A;
+  letter-spacing: -0.02em;
+}
+
+.vibe-multi-area-legend {
   display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  height: 70px;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #1A1A1A;
-}
-
-.vibe-timeline__col {
-  flex: 1;
-  height: 100%;
-  display: flex;
-  align-items: flex-end;
-}
-
-.vibe-timeline__bar {
-  width: 100%;
+  align-items: center;
+  gap: 14px;
+  background: #FAF8FF;
+  padding: 8px 14px;
+  border-radius: 12px;
   border: 1.5px solid #1A1A1A;
-  border-radius: 6px 6px 0 0;
-  transition: height 0.4s ease;
+  flex-wrap: wrap;
 }
 
-.vibe-timeline__ticks {
+.vibe-multi-area-legend-item {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  align-items: center;
+  gap: 6px;
 }
 
-.vibe-timeline__tick {
-  flex: 1;
-  text-align: center;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #555;
+.vibe-multi-area-legend-line {
+  width: 14px;
+  height: 3.5px;
+  border-radius: 2px;
+}
+
+.vibe-multi-area-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #1A1A1A;
+}
+
+.vibe-multi-area-legend-text {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1A1A1A;
+}
+
+/* SVG Chart Wrapper */
+.vibe-multi-area-chart-wrap {
+  width: 100%;
+  overflow-x: auto;
+  padding: 4px 0 8px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vibe-multi-area-svg {
+  width: 100%;
+  height: auto;
+  min-width: 680px;
+  display: block;
+  user-select: none;
+}
+
+.vibe-callout-badge text {
+  user-select: none;
 }
 
 /* Compose Bar Inline */
