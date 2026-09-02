@@ -1,823 +1,1277 @@
+/* ==========================================================================
+   Y2K SCRAPBOOK DASHBOARD / PASTEL CRAFT CHAOS DESIGN SYSTEM
+   ========================================================================== */
+
 :root {
-  --primary-yellow: #FFD600;
-  --secondary-purple: #7C4DFF;
-  --tertiary-red: #FF5252;
-  --light-pink: #FFD4D4;
-  --dark-neutral: #1A1A1A;
-  --canvas-bg: #F2EEFC;
-  --card-white: #FFFFFF;
-  --card-offwhite: #F5F3EF;
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --border-dark: 2.5px solid #1A1A1A;
-  --shadow-dark: 4px 4px 0px #1A1A1A;
-  --shadow-dark-lg: 8px 8px 0px #1A1A1A;
+  /* Colors */
+  --bg-cream: #F8F6F0;
+  --ink-black: #1A1A1A;
+  --hot-magenta: #FF2A85;
+  --pink-card: #FF8ECA;
+  --blue-card: #34CDFC;
+  --yellow-card: #FFE359;
+  --surface-low: #F5F3ED;
+  --surface-container: #F0EEE8;
+  --gray-clip: #D1D5DB;
+
+  /* Typography */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Merriweather', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Borders & Shadows */
+  --border-thick: 2px solid #1A1A1A;
+  --border-heavy: 4px solid #1A1A1A;
+  --shadow-hard: 4px 4px 0px #1A1A1A;
+  --shadow-hard-sm: 2px 2px 0px #1A1A1A;
+  --shadow-hard-lg: 6px 6px 0px #1A1A1A;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  background-color: var(--canvas-bg);
-  background-image: radial-gradient(circle, rgba(124, 77, 255, 0.08) 1.5px, transparent 1.5px);
-  background-size: 24px 24px;
-  color: var(--dark-neutral);
-  font-family: var(--font-sans);
+  background-color: #F8F6F0;
+  /* Realistic Scrapbook Dot-Grid & Paper Canvas Texture (5-8% opacity across the whole page) */
+  background-image: 
+    /* Dot-grid pattern (crisp 1.2px dots spaced every 22px at ~7% opacity) */
+    radial-gradient(circle, rgba(26, 26, 26, 0.08) 1.2px, transparent 1.2px),
+    /* Subtle organic paper tone variations (#FAF8F2, #F8F6F0, #F3EFE6) */
+    radial-gradient(circle at 15% 20%, #FAF8F2 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, #F4F0E8 0%, transparent 40%),
+    radial-gradient(circle at 30% 80%, #FAF7F0 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, #F3EFE6 0%, transparent 45%),
+    /* Faint diagonal paper scan creases */
+    linear-gradient(135deg, rgba(0, 0, 0, 0.018) 0%, transparent 25%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.015) 53%, transparent 75%);
+  background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  color: var(--ink-black);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* App Shell */
-.app-shell {
-  min-height: 100vh;
+/* Subtle Paper Grain & Noise Overlay across the whole viewport */
+.scrapbook-grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+  mix-blend-mode: multiply;
+  opacity: 0.07;
+}
+
+.scrapbook-grain-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Peeking Sticker Icons Tucked Behind Card Corners */
+.scrapbook-peeking-sticker {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  filter: drop-shadow(2px 2px 0px #1A1A1A);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.scrapbook-peeking-sticker--star {
+  top: -16px;
+  right: -14px;
+  transform: rotate(18deg);
+}
+
+.scrapbook-card:hover .scrapbook-peeking-sticker--star {
+  transform: rotate(26deg) scale(1.1);
+}
+
+.scrapbook-peeking-sticker--flower {
+  bottom: -15px;
+  right: -13px;
+  transform: rotate(-12deg);
+}
+
+.scrapbook-card:hover .scrapbook-peeking-sticker--flower {
+  transform: rotate(-18deg) scale(1.1);
+}
+
+.scrapbook-peeking-sticker--smiley {
+  bottom: -14px;
+  left: -14px;
+  transform: rotate(12deg);
+}
+
+.scrapbook-card:hover .scrapbook-peeking-sticker--smiley {
+  transform: rotate(18deg) scale(1.1);
+}
+
+/* Washi Tape Clip Path */
+.washi-clip {
+  clip-path: polygon(2% 0, 98% 0, 100% 10%, 97% 20%, 100% 30%, 98% 40%, 100% 50%, 97% 60%, 100% 70%, 98% 80%, 100% 90%, 97% 100%, 0 100%, 2% 90%, 0 80%, 3% 70%, 0 60%, 2% 50%, 0 40%, 3% 30%, 0 20%, 2% 10%);
+}
+
+/* Torn Edge Clip Path */
+.torn-edge {
+  clip-path: polygon(0 0, 10% 100%, 20% 0, 30% 100%, 40% 0, 50% 100%, 60% 0, 70% 100%, 80% 0, 90% 100%, 100% 0);
+}
+
+/* Decorative Background Washi Tapes & Scrapbook Details */
+.deco-washi-tape-top-left {
+  position: absolute;
+  top: 50px;
+  left: -8px;
+  width: 55px;
+  height: 18px;
+  background-color: var(--hot-magenta);
+  opacity: 0.85;
+  transform: rotate(-10deg);
+  z-index: 55;
+  pointer-events: none;
+}
+
+.deco-washi-tape-top-right {
+  position: absolute;
+  top: 85px;
+  right: 24px;
+  width: 140px;
+  height: 32px;
+  background-color: var(--hot-magenta);
+  opacity: 0.88;
+  transform: rotate(-8deg);
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.deco-washi-tape-bottom-grid,
+.deco-washi-tape-left-grid {
+  position: absolute;
+  top: 195px;
+  left: 14px;
+  transform: rotate(17deg);
+  width: 125px;
+  height: 28px;
+  background-color: rgba(52, 205, 252, 0.45);
+  background-image: linear-gradient(rgba(0, 102, 131, 0.25) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 102, 131, 0.25) 1px, transparent 1px);
+  background-size: 8px 8px;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.deco-washi-tape-craft {
+  position: absolute;
+  bottom: 34px;
+  left: 14%;
+  transform: rotate(3deg);
+  background-color: #F1E5CF;
+  border: 1px dashed rgba(26, 26, 26, 0.25);
+  padding: 4px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: #1A1A1A;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.08);
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+.deco-stamp-archive {
+  position: absolute;
+  bottom: 64px;
+  right: 90px;
+  transform: rotate(4deg);
+  border: 2px dashed #FF2A85;
+  color: #FF2A85;
+  background: rgba(255, 255, 255, 0.75);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
 }
 
-/* Top Navigation Bar */
-.top-nav {
+.deco-scrap-paper {
+  position: absolute;
+  bottom: -15px;
+  left: -10px;
+  width: 90px;
+  height: 105px;
+  background: #FFFFFF;
+  background-image: linear-gradient(#93c5fd 1px, transparent 1px),
+                    linear-gradient(90deg, #93c5fd 1px, transparent 1px);
+  background-size: 10px 10px;
+  border: 1.5px solid #1A1A1A;
+  box-shadow: 3px 3px 0px #1A1A1A;
+  transform: rotate(-8deg);
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deco-scrap-smiley {
+  width: 44px;
+  height: 44px;
+}
+
+/* Top App Bar */
+.scrapbook-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-cream);
+  border-bottom: 2px solid var(--ink-black);
+  box-shadow: var(--shadow-hard);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: var(--border-dark);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  padding: 14px 48px;
 }
 
-.top-nav__brand {
+@media (max-width: 768px) {
+  .scrapbook-header {
+    padding: 12px 20px;
+  }
+}
+
+.scrapbook-brand-group {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
   cursor: pointer;
   user-select: none;
 }
 
-.top-nav__logo-icon {
-  font-size: 1.5rem;
-  background: var(--primary-yellow);
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+.scrapbook-brand-title-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border: 2px solid #1A1A1A;
-  box-shadow: 2px 2px 0px #1A1A1A;
+  gap: 8px;
 }
 
-.top-nav__title {
-  font-size: 1.5rem;
+.scrapbook-brand-burst {
+  color: var(--hot-magenta);
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.scrapbook-brand {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(28px, 4vw, 36px);
+  color: #000000;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.scrapbook-brand-sub {
+  font-family: var(--font-display);
+  font-size: 13px;
   font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.03em;
+  color: var(--hot-magenta);
+  letter-spacing: -0.01em;
+  margin-top: 4px;
 }
 
-.top-nav__actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.top-nav__tab {
-  background: transparent;
-  border: 2px solid transparent;
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  transition: all 0.15s ease;
-}
-
-.top-nav__tab--active {
-  background: #FFFFFF;
-  border-color: #1A1A1A;
-  box-shadow: 2px 2px 0px #1A1A1A;
-}
-
-.top-nav__post-btn {
-  background: var(--primary-yellow);
-  color: var(--dark-neutral);
-  border: 2.5px solid #1A1A1A;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-weight: 800;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 3px 3px 0px #1A1A1A;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  font-family: var(--font-sans);
-}
-
-.top-nav__post-btn:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0px #1A1A1A;
-}
-
-.top-nav__post-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px #1A1A1A;
-}
-
-/* Main Layout */
-.main-content {
-  max-width: 1100px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 32px 24px 64px;
-}
-
-/* Error Banner */
-.banner--error {
-  background: var(--tertiary-red);
+.scrapbook-new-entry-btn {
+  background-color: var(--hot-magenta);
   color: #FFFFFF;
-  padding: 12px 18px;
-  border-radius: 12px;
-  border: 2px solid #1A1A1A;
-  font-weight: 700;
-  margin-bottom: 24px;
-  box-shadow: 3px 3px 0px #1A1A1A;
-}
-
-/* Headline Banner */
-.vibe-headline {
-  background: #FFFFFF;
-  border: 2.5px solid #1A1A1A;
-  border-radius: 20px;
-  padding: 24px 28px;
-  margin-bottom: 32px;
-  box-shadow: var(--shadow-dark);
-}
-
-.vibe-headline__header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.vibe-headline__eyebrow {
-  font-size: 0.75rem;
+  font-family: var(--font-display);
+  font-size: 14px;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #666;
-}
-
-.vibe-headline__pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  border: 1px solid #1A1A1A;
-  animation: pulse-glow 2s infinite ease-in-out;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.7; }
-}
-
-.vibe-headline__text {
-  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-  font-weight: 800;
-  margin: 0 0 16px;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-}
-
-.vibe-headline__highlight {
-  display: inline-block;
-  padding: 2px 12px;
-  border-radius: 8px;
-  border: 2px solid #1A1A1A;
-  transform: rotate(-1deg);
-}
-
-.vibe-headline__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.vibe-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1.5px solid #1A1A1A;
-  font-size: 0.85rem;
-  font-weight: 700;
-  box-shadow: 2px 2px 0px #1A1A1A;
-}
-
-/* Wall & Filters */
-.wall-container {
-  margin-bottom: 48px;
-}
-
-.wall-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 28px;
-}
-
-.filter-btn {
+  letter-spacing: 0.05em;
+  padding: 8px 24px;
+  border: 2px solid var(--ink-black);
+  border-radius: 9999px;
+  box-shadow: var(--shadow-hard);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #FFFFFF;
-  border: 2px solid #1A1A1A;
-  border-radius: 12px;
-  padding: 8px 16px;
-  font-weight: 700;
-  font-size: 0.9rem;
   cursor: pointer;
-  box-shadow: 2px 2px 0px #1A1A1A;
-  font-family: var(--font-sans);
-  transition: transform 0.15s ease, background-color 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.filter-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 3px 3px 0px #1A1A1A;
+.scrapbook-new-entry-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--ink-black);
 }
 
-.filter-btn--active {
-  background: var(--primary-yellow);
-  box-shadow: 3px 3px 0px #1A1A1A;
+.scrapbook-new-entry-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px var(--ink-black);
 }
 
-.filter-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid #1A1A1A;
+.scrapbook-btn-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  line-height: 1;
 }
 
-.filter-count {
-  background: rgba(26, 26, 26, 0.1);
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 0.75rem;
+/* Main Scrapbook Layout */
+.scrapbook-main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 48px 96px 48px;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .scrapbook-main {
+    padding: 24px 16px 80px 16px;
+  }
+}
+
+/* ==========================================================================
+   HERO: MOOD FREQUENCY SCRAPBOOK BOARD
+   ========================================================================== */
+
+.scrapbook-board-container {
+  position: relative;
+  margin-bottom: 48px;
+  padding: 0 8px;
+}
+
+/* Bulldog / Foldback Binder Clips */
+.scrapbook-binder-clip {
+  position: absolute;
+  top: -22px;
+  z-index: 30;
+  filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, 0.28));
+  pointer-events: none;
+}
+
+.scrapbook-binder-clip--left {
+  left: 44px;
+  transform: rotate(-3deg);
+}
+
+.scrapbook-binder-clip--right {
+  right: 44px;
+  transform: rotate(3deg);
+}
+
+/* Main Torn Notepad Sheet */
+.scrapbook-board {
+  background-color: #FBF9F4;
+  background-image: 
+    linear-gradient(rgba(180, 195, 215, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 195, 215, 0.38) 1px, transparent 1px);
+  background-size: 16px 16px;
+  position: relative;
+  padding: 34px 36px 36px 36px;
+  filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.08));
+  clip-path: polygon(
+    0% 7px, 2% 2px, 5% 9px, 8% 3px, 12% 8px, 16% 1px, 20% 7px, 24% 2px, 28% 9px, 32% 2px, 36% 7px, 40% 2px, 44% 9px, 48% 1px, 52% 8px, 56% 3px, 60% 9px, 64% 2px, 68% 8px, 72% 2px, 76% 9px, 80% 2px, 84% 8px, 88% 2px, 92% 9px, 96% 2px, 100% 6px,
+    100% calc(100% - 6px), 98% calc(100% - 1px), 95% calc(100% - 8px), 91% calc(100% - 2px), 87% calc(100% - 8px), 83% calc(100% - 1px), 79% calc(100% - 7px), 75% calc(100% - 2px), 71% calc(100% - 9px), 67% calc(100% - 2px), 63% calc(100% - 8px), 59% calc(100% - 2px), 55% calc(100% - 9px), 51% calc(100% - 1px), 47% calc(100% - 8px), 43% calc(100% - 2px), 39% calc(100% - 9px), 35% calc(100% - 1px), 31% calc(100% - 7px), 27% calc(100% - 2px), 23% calc(100% - 9px), 19% calc(100% - 1px), 15% calc(100% - 7px), 11% calc(100% - 2px), 7% calc(100% - 8px), 4% calc(100% - 1px), 0% calc(100% - 6px)
+  );
+}
+
+/* Dymo Label Header & Clean Horizontal Legend */
+.scrapbook-board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.dymo-label {
+  font-family: var(--font-mono);
+  font-size: 13px;
   font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background-color: var(--ink-black);
+  padding: 4px 14px;
+  display: inline-block;
+  border: 2px solid var(--ink-black);
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+  transform: rotate(-0.5deg);
+  margin-bottom: 0;
 }
 
-.wall-status {
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #555;
-  padding: 48px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 2px dashed #1A1A1A;
-  border-radius: 16px;
-}
-
-/* Note Cards Grid (Matching Reference Image 1) */
-.wall-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+/* Clean Legend: Dot + Uppercase Label */
+.scrapbook-legend-row {
+  display: flex;
+  align-items: center;
   gap: 24px;
+  flex-wrap: wrap;
 }
 
-.vibe-card {
-  border: 2.5px solid #1A1A1A;
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: var(--shadow-dark);
+.scrapbook-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scrapbook-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-black);
+  display: inline-block;
+}
+
+.scrapbook-legend-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Chart Layout: Y-Axis + Plot Canvas */
+.scrapbook-chart-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.scrapbook-y-axis {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 200px;
+  align-items: flex-end;
+  width: 20px;
+  height: 125px;
+  padding-bottom: 26px;
+  user-select: none;
+}
+
+.scrapbook-y-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink-black);
+  line-height: 1;
+}
+
+.scrapbook-y-label--zero {
+  opacity: 0.9;
+}
+
+/* Chart Canvas Stage */
+.scrapbook-chart-stage {
+  height: 125px;
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 16px 26px 16px;
+  background: transparent;
+  border-bottom: 2.5px solid var(--ink-black);
+  border-left: 2px solid var(--ink-black);
+}
+
+/* Horizontal Gridlines */
+.scrapbook-gridlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  pointer-events: none;
+}
+
+.scrapbook-gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1.5px dashed rgba(26, 26, 26, 0.25);
+}
+
+.scrapbook-gridline--baseline {
+  top: 100%;
+  border-top: 2.5px solid var(--ink-black);
+}
+
+.scrapbook-chart-cols {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 12px;
+  position: relative;
+  z-index: 5;
+}
+
+.scrapbook-chart-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 120px;
+  height: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.scrapbook-bars-cluster {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  gap: 4px;
+  width: 100%;
+  justify-content: center;
+}
+
+.scrapbook-bar-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  position: relative;
+}
+
+.scrapbook-bar-badge {
+  position: absolute;
+  top: -24px;
+  background: var(--ink-black);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--ink-black);
+  white-space: nowrap;
+  box-shadow: 1px 1px 0px var(--ink-black);
+  z-index: 10;
+  pointer-events: none;
+  animation: badge-pop 0.15s ease;
+}
+
+@keyframes badge-pop {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scrapbook-bar {
+  width: 18px;
+  border: 2px solid var(--ink-black);
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.scrapbook-bar:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.scrapbook-bar--zero-dash {
+  width: 14px;
+  height: 3.5px;
+  background-color: #6B7280;
+  border-radius: 1px;
+  margin: 0 1px;
+}
+
+.scrapbook-bar--pink {
+  background-color: #FF8ECA;
+}
+
+.scrapbook-bar--blue {
+  background-color: #34CDFC;
+}
+
+.scrapbook-bar--yellow {
+  background-color: #FFE359;
+}
+
+/* Column X-Axis Time Label */
+.scrapbook-col-label {
+  position: absolute;
+  bottom: -24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.scrapbook-col-label--now {
+  color: var(--hot-magenta);
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   WALL CARDS: SCRAPBOOK STYLES
+   ========================================================================== */
+
+.scrapbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .scrapbook-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Base Card */
+.scrapbook-card {
+  border: 2px solid var(--ink-black);
+  box-shadow: var(--shadow-hard);
+  padding: 24px;
+  position: relative;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
 }
 
-.vibe-card:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 7px 7px 0px #1A1A1A;
+.scrapbook-card:hover {
+  transform: rotate(0deg) scale(1.02) !important;
+  box-shadow: var(--shadow-hard-lg);
+  z-index: 30;
 }
 
-.vibe-card__top {
+/* Style 1: Pink Scrapbook Card with Grid */
+.scrapbook-card--pink {
+  background-color: var(--pink-card);
+  transform: rotate(2deg);
+  background-image: linear-gradient(rgba(225, 29, 72, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(225, 29, 72, 0.2) 1px, transparent 1px);
+  background-size: 15px 15px;
+}
+
+/* Style 2: Blue Grid Card */
+.scrapbook-card--blue {
+  background-color: var(--blue-card);
+  transform: rotate(-1.5deg);
+  background-image: linear-gradient(rgba(2, 132, 199, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(2, 132, 199, 0.28) 1px, transparent 1px);
+  background-size: 15px 15px;
+}
+
+/* Style 3: Yellow Scrapbook Card with Dot Grid */
+.scrapbook-card--yellow {
+  background-color: var(--yellow-card);
+  transform: rotate(2.5deg);
+  background-image: radial-gradient(rgba(180, 83, 9, 0.38) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  overflow: visible;
+}
+
+/* Stickers: Pushpin on Pink Card */
+.scrapbook-pushpin {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   align-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.scrapbook-pushpin-head {
+  width: 18px;
+  height: 18px;
+  background-color: #E11D48;
+  border: 2px solid var(--ink-black);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0px var(--ink-black);
+  position: relative;
+}
+
+.scrapbook-pushpin-shine {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 4px;
+  height: 4px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+}
+
+.scrapbook-pushpin-needle {
+  width: 2px;
+  height: 8px;
+  background-color: var(--ink-black);
+  margin-top: -1px;
+}
+
+.scrapbook-pushpin-sparkle {
+  position: absolute;
+  top: -8px;
+  right: -16px;
+  font-size: 14px;
+  filter: drop-shadow(1px 1px 0px #1A1A1A);
+  user-select: none;
+}
+
+/* Stickers: Green Washi Tape on Yellow Card */
+.scrapbook-card-washi--green {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 84px;
+  height: 22px;
+  background-color: #4BDFA0;
+  opacity: 0.92;
+  border: 1px dashed rgba(26, 26, 26, 0.25);
+  z-index: 15;
+}
+
+/* Stickers: Corner Ink Stamps */
+.scrapbook-stamp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  display: inline-block;
+  user-select: none;
+  border-style: solid;
+  border-width: 2px;
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
+  line-height: 1.2;
+}
+
+.scrapbook-stamp--pink {
+  border-color: #E11D48;
+  color: #E11D48;
+  background: rgba(255, 255, 255, 0.5);
+  transform: rotate(6deg);
+}
+
+.scrapbook-stamp--blue {
+  border-color: #0284C7;
+  color: #0284C7;
+  background: rgba(255, 255, 255, 0.5);
+  transform: rotate(-3deg);
+}
+
+.scrapbook-stamp--yellow {
+  border-color: #16A34A;
+  color: #16A34A;
+  background: rgba(255, 255, 255, 0.5);
+  transform: rotate(3deg);
+}
+
+.scrapbook-card-divider {
+  width: 100%;
+  height: 2px;
+  background-color: var(--ink-black);
   margin-bottom: 14px;
 }
 
-.vibe-card__user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.scrapbook-card-heart {
+  color: #E11D48;
+  margin-right: 6px;
+  font-size: 24px;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
 }
 
-.vibe-card__avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  color: #1A1A1A;
-  border: 1.5px solid #1A1A1A;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 0.85rem;
-  box-shadow: 1px 1px 0px #1A1A1A;
+/* Washi Tape on Blue Card */
+.scrapbook-card-washi {
+  position: absolute;
+  top: -8px;
+  left: -12px;
+  width: 72px;
+  height: 24px;
+  background-color: var(--hot-magenta);
+  opacity: 0.9;
+  transform: rotate(-12deg);
+  z-index: 10;
 }
 
-.vibe-card__handle {
-  font-weight: 800;
-  font-size: 0.9rem;
-}
-
-.vibe-card__time-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1.5px solid #1A1A1A;
-  border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  backdrop-filter: blur(4px);
-}
-
-.vibe-card--dark .vibe-card__time-pill {
-  background: rgba(255, 255, 255, 0.25);
-  color: #FFFFFF;
-}
-
-.vibe-card__body {
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.4;
-  margin: 0 0 20px;
-  word-break: break-word;
-}
-
-.vibe-card__bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.vibe-card__tag {
-  align-self: flex-start;
-  background: rgba(255, 255, 255, 0.7);
-  color: #1A1A1A;
-  border: 1.5px solid #1A1A1A;
-  border-radius: 999px;
-  padding: 4px 12px;
-  font-size: 0.75rem;
-  font-weight: 800;
-  box-shadow: 1.5px 1.5px 0px #1A1A1A;
-}
-
-.vibe-card__reactions {
-  display: flex;
-  gap: 8px;
-}
-
-.vibe-card__reaction-btn {
-  background: rgba(255, 255, 255, 0.65);
-  border: 1.5px solid #1A1A1A;
-  border-radius: 8px;
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #1A1A1A;
-  font-family: var(--font-sans);
-  transition: transform 0.1s ease, background 0.15s ease;
-}
-
-.vibe-card__reaction-btn:hover {
-  background: #FFFFFF;
-  transform: scale(1.08);
-}
-
-/* Multi-Line Area Chart (Mood Frequency Timeline) */
-.vibe-multi-area-card {
-  background: #FFFFFF;
-  border: 2.5px solid #1A1A1A;
-  border-radius: 18px;
-  padding: 16px 22px;
-  margin-bottom: 24px;
-  box-shadow: var(--shadow-dark);
-}
-
-.vibe-multi-area-header {
+/* Card Header */
+.scrapbook-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
-  gap: 16px;
-  flex-wrap: wrap;
 }
 
-.vibe-multi-area-header__info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.vibe-multi-area-eyebrow {
-  font-size: 0.75rem;
+.scrapbook-card-title {
+  font-family: var(--font-display);
+  font-size: 26px;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  color: #666;
+  color: var(--ink-black);
+  line-height: 1.2;
 }
 
-.vibe-multi-area-title {
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-  font-weight: 800;
-  margin: 0;
-  color: #1A1A1A;
-  letter-spacing: -0.02em;
+.scrapbook-card-title--boxed {
+  background: rgba(255, 255, 255, 0.85);
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1.5px solid var(--ink-black);
 }
 
-.vibe-multi-area-legend {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  background: #FAF8FF;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1.5px solid #1A1A1A;
-  flex-wrap: wrap;
-}
-
-.vibe-multi-area-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.vibe-multi-area-legend-line {
-  width: 14px;
-  height: 3.5px;
-  border-radius: 2px;
-}
-
-.vibe-multi-area-legend-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 1px solid #1A1A1A;
-}
-
-.vibe-multi-area-legend-text {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #1A1A1A;
-}
-
-/* SVG Chart Wrapper */
-.vibe-multi-area-chart-wrap {
-  width: 100%;
-  overflow-x: auto;
-  padding: 4px 0 8px 0;
-  -webkit-overflow-scrolling: touch;
-}
-
-.vibe-multi-area-svg {
-  width: 100%;
-  height: auto;
-  min-width: 680px;
-  display: block;
-  user-select: none;
-}
-
-.vibe-callout-badge text {
-  user-select: none;
-}
-
-/* Compose Bar Inline */
-.compose-bar-wrapper {
-  background: #FFFFFF;
-  border: 2.5px solid #1A1A1A;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: var(--shadow-dark);
-  margin-bottom: 32px;
-}
-
-.compose-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.compose-bar__inputs {
-  display: flex;
-  gap: 12px;
-}
-
-.compose-bar__input-handle {
-  width: 140px;
-  padding: 10px 14px;
-  border: 2px solid #1A1A1A;
-  border-radius: 12px;
-  font-family: var(--font-sans);
+.scrapbook-card-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 700;
-  font-size: 0.9rem;
-  outline: none;
+  color: var(--ink-black);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--ink-black);
 }
 
-.compose-bar__input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 2px solid #1A1A1A;
-  border-radius: 12px;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.95rem;
-  outline: none;
+/* Card Body Content */
+.scrapbook-card-body {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-black);
+  margin-bottom: 16px;
 }
 
-.compose-bar__input:focus, .compose-bar__input-handle:focus {
-  border-color: var(--secondary-purple);
-  box-shadow: 0 0 0 2px var(--secondary-purple);
+.scrapbook-card-body--boxed {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 10px 12px;
+  border: 2px solid var(--ink-black);
+  box-shadow: var(--shadow-hard-sm);
 }
 
-.compose-bar__actions {
+/* Card Bottom & Reactions */
+.scrapbook-card-bottom {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  border-top: 2px solid var(--ink-black);
+  padding-top: 14px;
 }
 
-.compose-bar__swatches {
+.scrapbook-card-bottom--boxed {
+  background: rgba(255, 255, 255, 0.85);
+  padding: 8px 10px;
+  border: 2px solid var(--ink-black);
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.scrapbook-card-reactions {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
-.swatch-pill {
-  border: 2px solid #1A1A1A;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-sans);
-  transition: transform 0.15s ease;
-}
-
-.swatch-pill--active {
-  transform: scale(1.06);
-  box-shadow: 2px 2px 0px #1A1A1A;
-}
-
-.compose-bar__buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-primary {
-  background: var(--primary-yellow);
-  color: var(--dark-neutral);
-  border: 2.5px solid #1A1A1A;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-weight: 800;
-  font-size: 0.95rem;
-  cursor: pointer;
-  box-shadow: 3px 3px 0px #1A1A1A;
-  font-family: var(--font-sans);
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 5px 5px 0px #1A1A1A;
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #FFFFFF;
-  color: var(--dark-neutral);
-  border: 2.5px solid #1A1A1A;
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #1A1A1A;
-  font-family: var(--font-sans);
-}
-
-/* POPUP MODAL (Matching Reference Image 2) */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(26, 26, 26, 0.45);
-  backdrop-filter: blur(8px);
+.scrapbook-reaction-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  border: 2px solid var(--ink-black);
+  background-color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.modal-card {
-  background: #FFFFFF;
-  border: 3px solid #1A1A1A;
-  border-radius: 24px;
-  box-shadow: var(--shadow-dark-lg);
-  width: 100%;
-  max-width: 520px;
-  padding: 28px;
-  animation: slideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px) scale(0.95); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-.modal-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #1A1A1A;
-  margin-bottom: 20px;
-}
-
-.modal-card__title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-.modal-card__close {
-  background: #FFFFFF;
-  border: 2px solid #1A1A1A;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 0.9rem;
-  font-weight: 800;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 2px 2px 0px #1A1A1A;
-  transition: transform 0.15s ease;
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.1s ease, background-color 0.15s ease;
 }
 
-.modal-card__close:hover {
+.scrapbook-reaction-btn:hover {
+  background-color: #FFE359;
   transform: scale(1.1);
 }
 
-.modal-card__form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.scrapbook-reaction-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }
 
-.modal-card__field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.scrapbook-reaction-btn--active {
+  background-color: var(--yellow-card) !important;
+  border-width: 2.5px !important;
+  border-color: var(--ink-black) !important;
+  box-shadow: inset 1px 1px 0px #1A1A1A, 1px 1px 0px #1A1A1A !important;
+  transform: scale(1.12);
 }
 
-.modal-card__label {
-  font-size: 0.85rem;
+.scrapbook-reaction-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+  color: var(--ink-black);
+}
+
+.scrapbook-reaction-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 800;
-  color: #333;
+  margin-left: 2px;
 }
 
-.modal-card__optional {
-  font-weight: 500;
-  color: #777;
-}
-
-.modal-card__input-handle,
-.modal-card__input-text {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #1A1A1A;
-  border-radius: 12px;
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: 600;
-  outline: none;
-  background: #FAF9F6;
-}
-
-.modal-card__input-text:focus,
-.modal-card__input-handle:focus {
-  border-color: var(--secondary-purple);
+/* Empty Wall State */
+.scrapbook-empty-state {
+  text-align: center;
+  padding: 48px 24px;
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.2);
+  border: 4px solid var(--ink-black);
+  box-shadow: var(--shadow-hard);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.modal-card__swatches {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.scrapbook-empty-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.scrapbook-empty-text {
+  font-family: var(--font-body);
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* 3-Card Empty State (Hyped Up, Low Power, Tiny Crisis) */
+.scrapbook-empty-grid {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 0 24px 0;
+}
+
+.scrapbook-empty-card {
+  width: 275px;
+  max-width: 100%;
+  border: 3px dashed #1A1A1A;
+  border-radius: 4px;
+  padding: 1.25rem;
+  opacity: 0.88;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.scrapbook-empty-card:hover {
+  opacity: 1;
+  transform: rotate(0deg) translateY(-4px) scale(1.02) !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.scrapbook-empty-card--pink {
+  background-color: #f4a6c8;
+  transform: rotate(-1.5deg);
+}
+
+.scrapbook-empty-card--pink .scrapbook-empty-card-desc {
+  color: #3a2a33;
+}
+
+.scrapbook-empty-card--blue {
+  background-color: #7ec4e8;
+  transform: rotate(1deg);
+}
+
+.scrapbook-empty-card--blue .scrapbook-empty-card-desc {
+  color: #1a2e3a;
+}
+
+.scrapbook-empty-card--yellow {
+  background-color: #f5d565;
+  transform: rotate(-0.5deg);
+}
+
+.scrapbook-empty-card--yellow .scrapbook-empty-card-desc {
+  color: #3a2f1a;
+}
+
+.scrapbook-empty-card-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 19px;
+  color: #1A1A1A;
+  margin-bottom: 0.6rem;
+  line-height: 1.2;
+}
+
+.scrapbook-empty-card-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+  flex: 1;
+}
+
+.scrapbook-empty-card-cta-wrap {
+  border-top: 2px solid #1A1A1A;
+  padding-top: 0.85rem;
+  margin-top: auto;
+  width: 100%;
+}
+
+.scrapbook-empty-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 13px;
+  padding: 8px 14px;
+  border: 2px solid #1A1A1A;
+  border-radius: 9999px;
+  box-shadow: 2.5px 2.5px 0px #1A1A1A;
+  width: 100%;
+  letter-spacing: 0.02em;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cta-attention 3s ease-in-out infinite;
+}
+
+.scrapbook-empty-card-arrow {
+  font-size: 15px;
+  font-weight: 900;
+  transition: transform 0.2s ease;
+}
+
+.scrapbook-empty-card:hover .scrapbook-empty-card-cta {
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px #1A1A1A;
+}
+
+.scrapbook-empty-card:hover .scrapbook-empty-card-arrow {
+  transform: translateX(4px);
+}
+
+@keyframes cta-attention {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 2.5px 2.5px 0px #1A1A1A;
+  }
+  50% {
+    transform: translateY(-2.5px);
+    box-shadow: 3.5px 4px 0px #1A1A1A;
+  }
+}
+
+/* ==========================================================================
+   POST MOOD MODAL: SCRAPBOOK NOTEPAD
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 26, 26, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.scrapbook-modal-paper {
+  background: #FFFFFF;
+  border: 4px solid var(--ink-black);
+  box-shadow: var(--shadow-hard-lg);
+  width: 100%;
+  max-width: 520px;
+  padding: 32px;
+  position: relative;
+  transform: rotate(-1deg);
+  background-image: linear-gradient(#f0eee8 1px, transparent 1px);
+  background-size: 100% 28px;
+}
+
+.scrapbook-modal-washi {
+  position: absolute;
+  top: -12px;
+  left: 40px;
+  width: 90px;
+  height: 24px;
+  background-color: var(--hot-magenta);
+  opacity: 0.9;
+  transform: rotate(-4deg);
+}
+
+.scrapbook-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.scrapbook-modal-close {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--ink-black);
+  border-radius: 9999px;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--shadow-hard-sm);
+  transition: transform 0.1s ease;
+}
+
+.scrapbook-modal-close:hover {
+  background: var(--pink-card);
+  transform: scale(1.1);
+}
+
+.scrapbook-form-group {
+  margin-bottom: 22px;
+}
+
+.scrapbook-input-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  color: var(--ink-black);
+}
+
+.scrapbook-textarea {
+  width: 100%;
+  min-height: 90px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ink-black);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 28px;
+  color: var(--ink-black);
+  resize: vertical;
+  outline: none;
+  padding: 4px 0;
+}
+
+.scrapbook-textarea:focus {
+  border-bottom: 3px solid var(--hot-magenta);
+}
+
+/* Mood Swatches in Modal */
+.scrapbook-swatches {
+  display: flex;
   gap: 12px;
 }
 
-.mood-swatch-card {
-  border: 2.5px solid #1A1A1A;
-  border-radius: 14px;
-  padding: 14px 16px;
-  font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: 0.95rem;
-  cursor: pointer;
+.scrapbook-swatch-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border: 2px solid var(--ink-black);
+  box-shadow: var(--shadow-hard-sm);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  box-shadow: 3px 3px 0px #1A1A1A;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.mood-swatch-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 0px #1A1A1A;
-}
-
-.mood-swatch-card--selected {
-  outline: 3px solid #1A1A1A;
-  outline-offset: 2px;
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 0px #1A1A1A;
-}
-
-.mood-swatch-card__icon {
-  font-size: 1.3rem;
-}
-
-.modal-card__footer {
-  padding-top: 16px;
-  border-top: 2px dashed #1A1A1A;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.modal-card__submit-btn {
-  width: 100%;
-  background: var(--primary-yellow);
-  color: var(--dark-neutral);
-  border: 3px solid #1A1A1A;
-  border-radius: 14px;
-  padding: 14px 24px;
-  font-family: var(--font-sans);
-  font-weight: 800;
-  font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 4px 4px 0px #1A1A1A;
+  border-radius: 4px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.modal-card__submit-btn:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 6px 6px 0px #1A1A1A;
+.scrapbook-swatch-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hard);
 }
 
-.modal-card__submit-btn:disabled {
+.scrapbook-swatch-btn--selected {
+  outline: 3px solid var(--ink-black);
+  outline-offset: 2px;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hard);
+}
+
+.scrapbook-swatch-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink-black);
+}
+
+.scrapbook-submit-btn {
+  width: 100%;
+  background-color: var(--hot-magenta);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  padding: 12px 24px;
+  border: 2px solid var(--ink-black);
+  border-radius: 9999px;
+  box-shadow: var(--shadow-hard);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  margin-top: 12px;
+}
+
+.scrapbook-submit-btn:hover:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--ink-black);
+}
+
+.scrapbook-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-@media (max-width: 640px) {
-  .top-nav {
-    padding: 14px 18px;
-  }
-  .modal-card__swatches {
-    grid-template-columns: 1fr 1fr;
-  }
-  .wall-grid {
-    grid-template-columns: 1fr;
-  }
+/* Banner Error */
+.banner--error {
+  background: var(--hot-magenta);
+  color: #FFFFFF;
+  border: 2px solid var(--ink-black);
+  box-shadow: var(--shadow-hard);
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 24px;
 }
-

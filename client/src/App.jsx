@@ -1,117 +1,88 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import ComposeBar from "./components/ComposeBar.jsx";
 import PostMoodModal from "./components/PostMoodModal.jsx";
 import Wall from "./components/Wall.jsx";
 import Timeline from "./components/Timeline.jsx";
-
-const API_BASE = "/api/notes";
-const NOTE_LIFETIME_MS = 5 * 60 * 60 * 1000; // 5 hours
+import ScrapbookDecor from "./components/ScrapbookDecor.jsx";
+import { useUserIdentity } from "./hooks/useUserIdentity.js";
+import { useNotes } from "./hooks/useNotes.js";
 
 export default function App() {
-  const [notes, setNotes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [posting, setPosting] = useState(false);
-  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMood, setModalMood] = useState(null);
   const [viewMode, setViewMode] = useState("wall"); // 'wall' or 'compose'
 
-  const activeNotes = notes.filter((n) => Date.now() - n.createdAt <= NOTE_LIFETIME_MS);
+  const { userId, userReactions, recordReaction } = useUserIdentity();
+  const { activeNotes, loading, posting, error, handlePost, handleReact } = useNotes(
+    userId,
+    recordReaction
+  );
 
-  const fetchNotes = useCallback(async () => {
-    try {
-      const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error("Failed to load the wall.");
-      const data = await res.json();
-      setNotes(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const handleOpenPostModal = (moodName) => {
+    setModalMood(moodName || null);
+    setIsModalOpen(true);
+  };
 
-  useEffect(() => {
-    fetchNotes();
-    const interval = setInterval(fetchNotes, 5000);
-    return () => clearInterval(interval);
-  }, [fetchNotes]);
-
-  async function handlePost({ status, handle, color, moodName }) {
-    setPosting(true);
-    try {
-      const res = await fetch(API_BASE, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status, handle, color, moodName }),
-      });
-      if (!res.ok) throw new Error("Couldn't pin that note.");
-      await fetchNotes();
-      setViewMode("wall");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setPosting(false);
-    }
-  }
-
-  async function handleReact(id, reaction) {
-    try {
-      const res = await fetch(`${API_BASE}/${id}/react`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reaction }),
-      });
-      if (!res.ok) throw new Error("Couldn't react to that note.");
-      const updated = await res.json();
-      setNotes((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));
-    } catch (err) {
-      setError(err.message);
-    }
-  }
+  const onPost = async (entry) => {
+    const ok = await handlePost(entry);
+    if (ok) setViewMode("wall");
+  };
 
   return (
-    <div className="app-shell">
-      {/* Navigation Top Bar */}
-      <header className="top-nav">
-        <div className="top-nav__brand" onClick={() => setViewMode("wall")}>
-          <span className="top-nav__logo-icon">⚡</span>
-          <h1 className="top-nav__title">Mood Wall</h1>
+    <div className="app-shell relative">
+      <ScrapbookDecor />
+
+      {/* Top App Bar */}
+      <header className="scrapbook-header">
+        <div className="scrapbook-brand-group" onClick={() => setViewMode("wall")}>
+          <div className="scrapbook-brand-title-wrap">
+            <span className="scrapbook-brand">Mood Wall</span>
+          </div>
         </div>
 
-        <div className="top-nav__actions">
-          <button
-            className="top-nav__post-btn"
-            onClick={() => setIsModalOpen(true)}
-          >
-            + Post Mood ↗
-          </button>
-        </div>
+        <button
+          type="button"
+          className="scrapbook-new-entry-btn"
+          onClick={() => handleOpenPostModal()}
+        >
+          <span className="scrapbook-btn-icon">add_circle</span>
+          <span>POST A MOOD</span>
+        </button>
       </header>
 
-      {/* Main Container */}
-      <main className="main-content">
+      {/* Main Content Canvas */}
+      <main className="scrapbook-main">
         {error && <div className="banner banner--error">{error}</div>}
 
         {viewMode === "compose" ? (
-          <section className="dedicated-compose-section">
-            <h2 className="section-title">Share Your Current Vibe</h2>
-            <ComposeBar onPost={handlePost} posting={posting} />
+          <section className="scrapbook-empty-state">
+            <h2 className="scrapbook-empty-title">Share Your Diary Entry</h2>
+            <ComposeBar onPost={onPost} posting={posting} />
           </section>
         ) : (
           <>
             <Timeline notes={activeNotes} />
-            <Wall notes={activeNotes} onReact={handleReact} loading={loading} />
+            <Wall
+              notes={activeNotes}
+              userReactions={userReactions}
+              onReact={handleReact}
+              loading={loading}
+              onOpenPostModal={handleOpenPostModal}
+            />
           </>
         )}
       </main>
 
-      {/* Popup Modal Page */}
+      {/* Scrapbook Post Modal */}
       <PostMoodModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onPost={handlePost}
+        onClose={() => {
+          setIsModalOpen(false);
+          setModalMood(null);
+        }}
+        onPost={onPost}
         posting={posting}
+        initialMoodName={modalMood}
       />
     </div>
   );

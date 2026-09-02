@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MOODS } from "../moods.js";
+import { MOODS } from "../mood/moodData.js";
 
 export default function ComposeBar({ onPost, posting, onOpenModal }) {
   const [status, setStatus] = useState("");
