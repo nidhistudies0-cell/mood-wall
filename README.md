@@ -7,7 +7,7 @@ backend, storing notes in memory — no database setup.
 ## Project structure
 
 ```
-vibe-check/
+mood-wall/
 ├── client/                     
 │   ├── index.html              
 │   ├── vite.config.js          
