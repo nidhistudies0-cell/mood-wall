@@ -1,7 +1,6 @@
 export default function DoodlesBackground() {
   return (
     <div className="scrapbook-doodles-layer" aria-hidden="true">
-      {/* 1. Sparkle Star ✦ (Top Left near header) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "85px", left: "5%", width: "28px", height: "28px", transform: "rotate(12deg)" }}
@@ -15,7 +14,6 @@ export default function DoodlesBackground() {
         <path d="M12 2 C12 7 7 12 2 12 C7 12 12 17 12 22 C12 17 17 12 22 12 C17 12 12 7 12 2 Z" />
       </svg>
 
-      {/* 2. Handwritten "OMG!" (Top Right near header) */}
       <div
         className="scrapbook-doodle-text"
         style={{ top: "95px", right: "7%", transform: "rotate(-8deg)", fontSize: "19px" }}
@@ -23,7 +21,6 @@ export default function DoodlesBackground() {
         "OMG!"
       </div>
 
-      {/* 3. Hand-drawn Butterfly (Upper Left side of board) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "240px", left: "2%", width: "36px", height: "32px", transform: "rotate(-15deg)" }}
@@ -43,7 +40,6 @@ export default function DoodlesBackground() {
         <path d="M16 6 C18 3, 21 3, 21 3" />
       </svg>
 
-      {/* 4. Hand-drawn Five-Point Star ☆ (Right of Frequency Board) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "220px", right: "3%", width: "32px", height: "32px", transform: "rotate(18deg)" }}
@@ -57,7 +53,6 @@ export default function DoodlesBackground() {
         <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
       </svg>
 
-      {/* 5. Hand-drawn Cute Cloud ☁ (Between Board and Cards on the left) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "480px", left: "3%", width: "42px", height: "26px", transform: "rotate(-4deg)" }}
@@ -71,7 +66,6 @@ export default function DoodlesBackground() {
         <path d="M8 18 C4 18, 2 15, 3 11 C4 7, 8 7, 10 9 C11 5, 17 3, 22 6 C25 4, 30 6, 31 10 C34 11, 35 15, 32 18 C30 20, 10 20, 8 18 Z" />
       </svg>
 
-      {/* 6. Hand-drawn Double Cherries 🍒 (Middle right) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "490px", right: "4%", width: "34px", height: "36px", transform: "rotate(10deg)" }}
@@ -89,7 +83,6 @@ export default function DoodlesBackground() {
         <path d="M20 4 C15 3, 14 6, 17 8 C20 10, 24 5, 20 4 Z" />
       </svg>
 
-      {/* 7. Handwritten "<3" (Above cards) */}
       <div
         className="scrapbook-doodle-text"
         style={{ top: "460px", left: "22%", transform: "rotate(-12deg)", fontSize: "22px" }}
@@ -97,7 +90,6 @@ export default function DoodlesBackground() {
         &lt;3
       </div>
 
-      {/* 8. Hand-drawn Outline Heart ♡ (Between cards) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "470px", right: "26%", width: "24px", height: "24px", transform: "rotate(14deg)" }}
@@ -111,7 +103,6 @@ export default function DoodlesBackground() {
         <path d="M12 21 C12 21, 3 14, 3 8.5 C3 5.4, 5.4 3, 8.5 3 C10.2 3, 11.5 4, 12 5 C12.5 4, 13.8 3, 15.5 3 C18.6 3, 21 5.4, 21 8.5 C21 14, 12 21, 12 21 Z" />
       </svg>
 
-      {/* 9. Retro Flip Phone Doodle (Below left) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "820px", left: "2%", width: "28px", height: "42px", transform: "rotate(-10deg)" }}
@@ -130,7 +121,6 @@ export default function DoodlesBackground() {
         <line x1="8" y1="30" x2="16" y2="30" />
       </svg>
 
-      {/* 10. Hand-drawn Lightning Bolt ⚡ (Bottom right) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "850px", right: "3%", width: "22px", height: "34px", transform: "rotate(8deg)" }}
@@ -144,7 +134,6 @@ export default function DoodlesBackground() {
         <polygon points="9,1 1,14 8,14 7,25 15,11 8,11" />
       </svg>
 
-      {/* 11. Hand-drawn Doodle Smiley :) (Bottom center) */}
       <svg
         className="scrapbook-doodle"
         style={{ top: "920px", left: "48%", width: "28px", height: "28px", transform: "rotate(6deg)" }}
@@ -161,7 +150,6 @@ export default function DoodlesBackground() {
         <path d="M8 15 C10 18, 14 18, 16 15" />
       </svg>
 
-      {/* 12. Handwritten "xoxo" (Near wall cards) */}
       <div
         className="scrapbook-doodle-text"
         style={{ top: "880px", left: "18%", transform: "rotate(5deg)", fontSize: "18px" }}
@@ -169,7 +157,6 @@ export default function DoodlesBackground() {
         xoxo
       </div>
 
-      {/* 13. Handwritten "BRB" (Near bottom right) */}
       <div
         className="scrapbook-doodle-text"
         style={{ top: "900px", right: "16%", transform: "rotate(-6deg)", fontSize: "17px" }}

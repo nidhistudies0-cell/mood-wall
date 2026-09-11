@@ -1,9 +1,7 @@
-/* ==========================================================================
-   Y2K SCRAPBOOK DASHBOARD / PASTEL CRAFT CHAOS DESIGN SYSTEM
-   ========================================================================== */
+
 
 :root {
-  /* Colors */
+  
   --bg-cream: #F8F6F0;
   --ink-black: #1A1A1A;
   --hot-magenta: #FF2A85;
@@ -14,12 +12,10 @@
   --surface-container: #F0EEE8;
   --gray-clip: #D1D5DB;
 
-  /* Typography */
   --font-display: 'Bricolage Grotesque', sans-serif;
   --font-body: 'Merriweather', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Borders & Shadows */
   --border-thick: 2px solid #1A1A1A;
   --border-heavy: 4px solid #1A1A1A;
   --shadow-hard: 4px 4px 0px #1A1A1A;
@@ -35,16 +31,16 @@
 
 body {
   background-color: #F8F6F0;
-  /* Realistic Scrapbook Dot-Grid & Paper Canvas Texture (5-8% opacity across the whole page) */
+  
   background-image: 
-    /* Dot-grid pattern (crisp 1.2px dots spaced every 22px at ~7% opacity) */
+    
     radial-gradient(circle, rgba(26, 26, 26, 0.08) 1.2px, transparent 1.2px),
-    /* Subtle organic paper tone variations (#FAF8F2, #F8F6F0, #F3EFE6) */
+    
     radial-gradient(circle at 15% 20%, #FAF8F2 0%, transparent 45%),
     radial-gradient(circle at 85% 15%, #F4F0E8 0%, transparent 40%),
     radial-gradient(circle at 30% 80%, #FAF7F0 0%, transparent 50%),
     radial-gradient(circle at 85% 85%, #F3EFE6 0%, transparent 45%),
-    /* Faint diagonal paper scan creases */
+    
     linear-gradient(135deg, rgba(0, 0, 0, 0.018) 0%, transparent 25%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.015) 53%, transparent 75%);
   background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
   color: var(--ink-black);
@@ -55,7 +51,6 @@ body {
   position: relative;
 }
 
-/* Subtle Paper Grain & Noise Overlay across the whole viewport */
 .scrapbook-grain-overlay {
   position: fixed;
   top: 0;
@@ -73,7 +68,6 @@ body {
   height: 100%;
 }
 
-/* Peeking Sticker Icons Tucked Behind Card Corners */
 .scrapbook-peeking-sticker {
   position: absolute;
   z-index: -1;
@@ -112,17 +106,14 @@ body {
   transform: rotate(18deg) scale(1.1);
 }
 
-/* Washi Tape Clip Path */
 .washi-clip {
   clip-path: polygon(2% 0, 98% 0, 100% 10%, 97% 20%, 100% 30%, 98% 40%, 100% 50%, 97% 60%, 100% 70%, 98% 80%, 100% 90%, 97% 100%, 0 100%, 2% 90%, 0 80%, 3% 70%, 0 60%, 2% 50%, 0 40%, 3% 30%, 0 20%, 2% 10%);
 }
 
-/* Torn Edge Clip Path */
 .torn-edge {
   clip-path: polygon(0 0, 10% 100%, 20% 0, 30% 100%, 40% 0, 50% 100%, 60% 0, 70% 100%, 80% 0, 90% 100%, 100% 0);
 }
 
-/* Decorative Background Washi Tapes & Scrapbook Details */
 .deco-washi-tape-top-left {
   position: absolute;
   top: 50px;
@@ -233,7 +224,6 @@ body {
   height: 44px;
 }
 
-/* Top App Bar */
 .scrapbook-header {
   position: sticky;
   top: 0;
@@ -324,7 +314,6 @@ body {
   line-height: 1;
 }
 
-/* Main Scrapbook Layout */
 .scrapbook-main {
   width: 100%;
   max-width: 1200px;
@@ -340,17 +329,12 @@ body {
   }
 }
 
-/* ==========================================================================
-   HERO: MOOD FREQUENCY SCRAPBOOK BOARD
-   ========================================================================== */
-
 .scrapbook-board-container {
   position: relative;
   margin-bottom: 48px;
   padding: 0 8px;
 }
 
-/* Bulldog / Foldback Binder Clips */
 .scrapbook-binder-clip {
   position: absolute;
   top: -22px;
@@ -369,7 +353,6 @@ body {
   transform: rotate(3deg);
 }
 
-/* Main Torn Notepad Sheet */
 .scrapbook-board {
   background-color: #FBF9F4;
   background-image: 
@@ -385,7 +368,6 @@ body {
   );
 }
 
-/* Dymo Label Header & Clean Horizontal Legend */
 .scrapbook-board-header {
   display: flex;
   justify-content: space-between;
@@ -411,7 +393,6 @@ body {
   margin-bottom: 0;
 }
 
-/* Clean Legend: Dot + Uppercase Label */
 .scrapbook-legend-row {
   display: flex;
   align-items: center;
@@ -430,7 +411,23 @@ body {
   height: 12px;
   border-radius: 50%;
   border: 1.5px solid var(--ink-black);
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.scrapbook-legend-crown {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-8deg);
+  font-size: 28px;
+  color: #D97706;
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 1.5px 1px rgba(0, 0, 0, 0.15));
 }
 
 .scrapbook-legend-text {
@@ -442,7 +439,6 @@ body {
   text-transform: uppercase;
 }
 
-/* Chart Layout: Y-Axis + Plot Canvas */
 .scrapbook-chart-wrapper {
   display: flex;
   align-items: flex-end;
@@ -473,7 +469,6 @@ body {
   opacity: 0.9;
 }
 
-/* Chart Canvas Stage */
 .scrapbook-chart-stage {
   height: 125px;
   flex: 1;
@@ -486,7 +481,6 @@ body {
   border-left: 2px solid var(--ink-black);
 }
 
-/* Horizontal Gridlines */
 .scrapbook-gridlines {
   position: absolute;
   top: 0;
@@ -613,7 +607,6 @@ body {
   background-color: #FFE359;
 }
 
-/* Column X-Axis Time Label */
 .scrapbook-col-label {
   position: absolute;
   bottom: -24px;
@@ -631,10 +624,6 @@ body {
   font-weight: 900;
 }
 
-/* ==========================================================================
-   WALL CARDS: SCRAPBOOK STYLES
-   ========================================================================== */
-
 .scrapbook-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -649,7 +638,6 @@ body {
   }
 }
 
-/* Base Card */
 .scrapbook-card {
   border: 2px solid var(--ink-black);
   box-shadow: var(--shadow-hard);
@@ -664,7 +652,6 @@ body {
   z-index: 30;
 }
 
-/* Style 1: Pink Scrapbook Card with Grid */
 .scrapbook-card--pink {
   background-color: var(--pink-card);
   transform: rotate(2deg);
@@ -673,7 +660,6 @@ body {
   background-size: 15px 15px;
 }
 
-/* Style 2: Blue Grid Card */
 .scrapbook-card--blue {
   background-color: var(--blue-card);
   transform: rotate(-1.5deg);
@@ -682,7 +668,6 @@ body {
   background-size: 15px 15px;
 }
 
-/* Style 3: Yellow Scrapbook Card with Dot Grid */
 .scrapbook-card--yellow {
   background-color: var(--yellow-card);
   transform: rotate(2.5deg);
@@ -691,7 +676,6 @@ body {
   overflow: visible;
 }
 
-/* Stickers: Pushpin on Pink Card */
 .scrapbook-pushpin {
   position: absolute;
   top: -12px;
@@ -740,7 +724,6 @@ body {
   user-select: none;
 }
 
-/* Stickers: Green Washi Tape on Yellow Card */
 .scrapbook-card-washi--green {
   position: absolute;
   top: -10px;
@@ -754,7 +737,6 @@ body {
   z-index: 15;
 }
 
-/* Stickers: Corner Ink Stamps */
 .scrapbook-stamp {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -807,7 +789,6 @@ body {
   display: inline-block;
 }
 
-/* Washi Tape on Blue Card */
 .scrapbook-card-washi {
   position: absolute;
   top: -8px;
@@ -820,7 +801,6 @@ body {
   z-index: 10;
 }
 
-/* Card Header */
 .scrapbook-card-header {
   display: flex;
   justify-content: space-between;
@@ -854,7 +834,6 @@ body {
   border: 1px solid var(--ink-black);
 }
 
-/* Card Body Content */
 .scrapbook-card-body {
   font-family: var(--font-mono);
   font-size: 14px;
@@ -870,7 +849,6 @@ body {
   box-shadow: var(--shadow-hard-sm);
 }
 
-/* Card Bottom & Reactions */
 .scrapbook-card-bottom {
   display: flex;
   justify-content: flex-start;
@@ -938,7 +916,6 @@ body {
   margin-left: 2px;
 }
 
-/* Empty Wall State */
 .scrapbook-empty-state {
   text-align: center;
   padding: 48px 24px;
@@ -962,7 +939,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* 3-Card Empty State (Hyped Up, Low Power, Tiny Crisis) */
 .scrapbook-empty-grid {
   display: flex;
   gap: 1.5rem;
@@ -1093,10 +1069,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   POST MOOD MODAL: SCRAPBOOK NOTEPAD
-   ========================================================================== */
-
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -1197,7 +1169,6 @@ body {
   border-bottom: 3px solid var(--hot-magenta);
 }
 
-/* Mood Swatches in Modal */
 .scrapbook-swatches {
   display: flex;
   gap: 12px;
@@ -1263,7 +1234,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Banner Error */
 .banner--error {
   background: var(--hot-magenta);
   color: #FFFFFF;

@@ -8,10 +8,8 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 4000;
 
-// How long a note stays on the wall before it expires (ms)
-const NOTE_LIFETIME_MS = 5 * 60 * 60 * 1000; // 5 hours
+const NOTE_LIFETIME_MS = 5 * 60 * 60 * 1000; 
 
-// In-memory store: starts empty so a fresh startup or new user displays the 3 Empty State cards
 let notes = [];
 
 function isExpired(note) {
@@ -25,18 +23,14 @@ function pruneExpired() {
     console.log(`[Auto-Expire] Pruned ${initialCount - notes.length} expired note(s) (> 5 hours old). Remaining: ${notes.length}`);
   }
 }
-
-// Automatically prune expired notes every 10 seconds in the background
 setInterval(pruneExpired, 10000);
 
-// GET /api/notes — return all active (non-expired) notes, newest first
 app.get("/api/notes", (req, res) => {
   pruneExpired();
   const sorted = [...notes].sort((a, b) => b.createdAt - a.createdAt);
   res.json(sorted);
 });
 
-// POST /api/notes — create a new note
 app.post("/api/notes", (req, res) => {
   const { status, color, moodName, handle } = req.body;
 
@@ -65,7 +59,6 @@ app.post("/api/notes", (req, res) => {
   res.status(201).json(note);
 });
 
-// POST /api/notes/:id/react — one reaction per user per note (toggle or switch)
 const VALID_REACTIONS = ["fire", "laugh", "dead", "thumbs_down"];
 
 app.post("/api/notes/:id/react", (req, res) => {
@@ -93,15 +86,12 @@ app.post("/api/notes/:id/react", (req, res) => {
   const prevReaction = note.userReactions[userKey];
 
   if (prevReaction === reaction) {
-    // User clicked the same reaction: toggle off
     note.reactions[reaction] = Math.max(0, (note.reactions[reaction] || 0) - 1);
     delete note.userReactions[userKey];
   } else {
-    // If user previously reacted with a different emoji, decrement old one
     if (prevReaction && note.reactions[prevReaction] !== undefined) {
       note.reactions[prevReaction] = Math.max(0, note.reactions[prevReaction] - 1);
     }
-    // Increment the new reaction
     note.reactions[reaction] = (note.reactions[reaction] || 0) + 1;
     note.userReactions[userKey] = reaction;
   }

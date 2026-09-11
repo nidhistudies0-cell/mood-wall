@@ -10,7 +10,7 @@ import { useNotes } from "./hooks/useNotes.js";
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMood, setModalMood] = useState(null);
-  const [viewMode, setViewMode] = useState("wall"); // 'wall' or 'compose'
+  const [viewMode, setViewMode] = useState("wall"); 
 
   const { userId, userReactions, recordReaction } = useUserIdentity();
   const { activeNotes, loading, posting, error, handlePost, handleReact } = useNotes(
@@ -32,7 +32,6 @@ export default function App() {
     <div className="app-shell relative">
       <ScrapbookDecor />
 
-      {/* Top App Bar */}
       <header className="scrapbook-header">
         <div className="scrapbook-brand-group" onClick={() => setViewMode("wall")}>
           <div className="scrapbook-brand-title-wrap">
@@ -50,7 +49,6 @@ export default function App() {
         </button>
       </header>
 
-      {/* Main Content Canvas */}
       <main className="scrapbook-main">
         {error && <div className="banner banner--error">{error}</div>}
 
@@ -73,7 +71,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Scrapbook Post Modal */}
       <PostMoodModal
         isOpen={isModalOpen}
         onClose={() => {

@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export function useUserIdentity() {
-  // Persistent anonymous user ID to enforce one reaction per user per note
   const [userId] = useState(() => {
     let uid = localStorage.getItem("vibe_user_id");
     if (!uid) {
@@ -11,7 +10,6 @@ export function useUserIdentity() {
     return uid;
   });
 
-  // Track the user's active reaction for each note
   const [userReactions, setUserReactions] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("vibe_user_reactions") || "{}");

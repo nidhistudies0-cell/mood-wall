@@ -2,9 +2,21 @@ import { useState, useEffect } from "react";
 import { MOODS } from "../mood/moodData.js";
 import { moodByName } from "../mood/moodResolver.js";
 
+const STATUS_PROMPTS = [
+  "Just remembered I left the laundry in the washer again...",
+  "Convinced my cat is running a secret second life...",
+  "Wrote a whole email then forgot to send it...",
+  "Said 'five more minutes' to my bed forty minutes ago...",
+  "Listening to one song on repeat like it's my full-time job...",
+  "Just had a deep thought in the food court...",
+];
+
 export default function PostMoodModal({ isOpen, onClose, onPost, posting, initialMoodName }) {
   const [status, setStatus] = useState("");
   const [selectedMood, setSelectedMood] = useState(MOODS[0]);
+  const [statusPrompt] = useState(
+    () => STATUS_PROMPTS[Math.floor(Math.random() * STATUS_PROMPTS.length)]
+  );
 
   useEffect(() => {
     if (initialMoodName) {
@@ -31,7 +43,6 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="scrapbook-modal-paper" onClick={(e) => e.stopPropagation()}>
-        {/* Washi tape on modal top */}
         <div className="scrapbook-modal-washi washi-clip" aria-hidden="true" />
 
         <div className="scrapbook-modal-header">
@@ -49,7 +60,6 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Note Status Content */}
           <div className="scrapbook-form-group">
             <label className="scrapbook-input-label" htmlFor="scrapbook-status">
               What's the vibe? 
@@ -57,7 +67,7 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
             <textarea
               id="scrapbook-status"
               className="scrapbook-textarea"
-              placeholder="Just got the new transparent pager. It's totally off the hook..."
+              placeholder={statusPrompt}
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               maxLength={240}
@@ -66,7 +76,6 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
             />
           </div>
 
-          {/* Mood Swatches */}
           <div className="scrapbook-form-group">
             <span className="scrapbook-input-label">Pick Paper Color</span>
             <div className="scrapbook-swatches">
@@ -90,7 +99,6 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
             </div>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className="scrapbook-submit-btn"

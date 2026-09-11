@@ -1,7 +1,6 @@
 export default function ScrapbookDecor() {
   return (
     <>
-      {/* Subtle Paper Grain & Noise Filter Overlay across entire canvas */}
       <div className="scrapbook-grain-overlay" aria-hidden="true">
         <svg className="scrapbook-grain-svg">
           <filter id="scrapbook-paper-grain">
@@ -25,7 +24,6 @@ export default function ScrapbookDecor() {
         </svg>
       </div>
 
-      {/* Decorative Background Washi Tapes & Scrapbook Details */}
       <div className="deco-washi-tape-top-right washi-clip" aria-hidden="true" />
       <div className="deco-washi-tape-left-grid washi-clip" aria-hidden="true" />
       <div className="deco-stamp-archive" aria-hidden="true">

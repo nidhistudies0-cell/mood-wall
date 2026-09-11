@@ -54,14 +54,11 @@ export default function NoteCard({ note, userReaction, onReact }) {
     );
   }
 
-  // Variant 2: Blue Grid Card (Low Power)
   if (isBlue) {
     return (
       <article className="scrapbook-card scrapbook-card--blue">
-        {/* Washi tape sticker on top-left */}
         <div className="scrapbook-card-washi washi-clip" aria-hidden="true" />
 
-        {/* Peeking die-cut flower sticker tucked behind corner */}
         <div className="scrapbook-peeking-sticker scrapbook-peeking-sticker--flower" aria-hidden="true">
           <svg viewBox="0 0 36 36" width="34" height="34">
             <circle cx="18" cy="8" r="6" fill="#FF8ECA" stroke="#1A1A1A" strokeWidth="2" />
@@ -90,14 +87,11 @@ export default function NoteCard({ note, userReaction, onReact }) {
     );
   }
 
-  // Variant 3: Yellow Dot-Grid Card (Tiny Crisis)
   if (isYellow) {
     return (
       <article className="scrapbook-card scrapbook-card--yellow">
-        {/* Green Washi Tape Sticker at Top Center */}
         <div className="scrapbook-card-washi--green washi-clip" aria-hidden="true" />
 
-        {/* Peeking die-cut smiley sticker tucked behind corner */}
         <div className="scrapbook-peeking-sticker scrapbook-peeking-sticker--smiley" aria-hidden="true">
           <svg viewBox="0 0 32 32" width="32" height="32">
             <circle cx="16" cy="16" r="14" fill="#34CDFC" stroke="#1A1A1A" strokeWidth="2.5" />
@@ -126,10 +120,8 @@ export default function NoteCard({ note, userReaction, onReact }) {
     );
   }
 
-  // Variant 1: Pink Grid Card (Hyped Up)
   return (
     <article className="scrapbook-card scrapbook-card--pink">
-      {/* Red Pushpin Sticker with Sparkles */}
       <div className="scrapbook-pushpin" aria-hidden="true">
         <div className="scrapbook-pushpin-head">
           <div className="scrapbook-pushpin-shine" />
@@ -138,7 +130,6 @@ export default function NoteCard({ note, userReaction, onReact }) {
         <span className="scrapbook-pushpin-sparkle">✨</span>
       </div>
 
-      {/* Peeking die-cut star sticker tucked behind top-right corner */}
       <div className="scrapbook-peeking-sticker scrapbook-peeking-sticker--star" aria-hidden="true">
         <svg viewBox="0 0 36 36" width="34" height="34">
           <polygon
@@ -163,7 +154,6 @@ export default function NoteCard({ note, userReaction, onReact }) {
 
       <p className="scrapbook-card-body">{note.status}</p>
 
-      {/* Underline separator */}
       <div className="scrapbook-card-divider" />
 
       <div className="scrapbook-card-bottom" style={{ borderTop: "none", paddingTop: 0 }}>

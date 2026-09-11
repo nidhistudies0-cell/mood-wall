@@ -1,4 +1,3 @@
-// Y2K Pastel Craft Chaos Mood Palette & Reactions Data
 export const MOODS = [
   {
     label: "HYPED UP",

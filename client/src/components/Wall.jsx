@@ -14,7 +14,6 @@ export default function Wall({ notes, userReactions, onReact, loading, onOpenPos
     return (
       <section className="scrapbook-wall-section" aria-label="Empty Mood Wall State">
         <div className="scrapbook-empty-grid">
-          {/* HYPED UP - pink */}
           <div
             className="scrapbook-empty-card scrapbook-empty-card--pink"
             onClick={() => onOpenPostModal?.("HYPED UP")}
@@ -39,7 +38,6 @@ export default function Wall({ notes, userReactions, onReact, loading, onOpenPos
             </div>
           </div>
 
-          {/* LOW POWER - blue */}
           <div
             className="scrapbook-empty-card scrapbook-empty-card--blue"
             onClick={() => onOpenPostModal?.("LOW POWER")}
@@ -64,7 +62,6 @@ export default function Wall({ notes, userReactions, onReact, loading, onOpenPos
             </div>
           </div>
 
-          {/* TINY CRISIS - yellow */}
           <div
             className="scrapbook-empty-card scrapbook-empty-card--yellow"
             onClick={() => onOpenPostModal?.("TINY CRISIS")}

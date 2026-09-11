@@ -2,13 +2,11 @@ import { MOODS } from "./moodData.js";
 import { moodByName } from "./moodResolver.js";
 import { NOTE_LIFETIME_MS } from "../config.js";
 
-// Helper for clean, localized 12-hour timestamps (e.g. "11:43 PM")
 export function formatClockTime(ms) {
   const d = new Date(ms);
   return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 }
 
-// Given the active notes, work out counts per mood
 export function computeMoodBreakdown(notes) {
   const counts = new Map();
 
@@ -30,12 +28,27 @@ export function computeDominant(breakdown) {
   return breakdown[0];
 }
 
-// 5 time buckets across the 5-hour note lifetime (1 hour each)
+export function computeDominantMood(notes) {
+  if (!notes || notes.length === 0) return null;
+
+  const counts = {};
+  for (const note of notes) {
+    const mood = note.mood ?? note.moodName;
+    counts[mood] = (counts[mood] || 0) + 1;
+  }
+
+  const entries = Object.entries(counts);
+  const topCount = Math.max(...entries.map(([, count]) => count));
+  const topMoods = entries.filter(([, count]) => count === topCount);
+
+  if (topMoods.length > 1) return null;
+  return topMoods[0][0];
+}
+
 const BUCKET_COUNT = 5;
-const BUCKET_MS = NOTE_LIFETIME_MS / BUCKET_COUNT; // 1 hour = 3600000 ms
+const BUCKET_MS = NOTE_LIFETIME_MS / BUCKET_COUNT; 
 
 export function computeTimeline(notes, now = Date.now()) {
-  // Buckets from 0 (now to -1h) down to 4 (-4h to -5h)
   const rawBuckets = Array.from({ length: BUCKET_COUNT }, (_, i) => {
     const startMs = now - (i + 1) * BUCKET_MS;
     const endMs = now - i * BUCKET_MS;
@@ -66,7 +79,6 @@ export function computeTimeline(notes, now = Date.now()) {
     }
   }
 
-  // Reverse so chronological order: oldest -> newest
   const buckets = rawBuckets
     .map((bucket) => {
       const total = bucket.notes.length;
@@ -79,7 +91,6 @@ export function computeTimeline(notes, now = Date.now()) {
         .filter((entry) => entry.mood)
         .sort((a, b) => b.count - a.count);
 
-      // Extract individual counts for each of the 3 moods
       const moodCounts = MOODS.map((mood) => {
         let count = 0;
         for (const [name, c] of bucket.counts.entries()) {

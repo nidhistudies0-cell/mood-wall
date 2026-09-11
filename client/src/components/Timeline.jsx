@@ -1,27 +1,30 @@
 import { useState } from "react";
-import { computeTimeline } from "../mood/moodStats.js";
+import { computeDominantMood, computeTimeline } from "../mood/moodStats.js";
 import { MOODS } from "../mood/moodData.js";
+import { NOTE_LIFETIME_MS } from "../config.js";
 
 export default function Timeline({ notes }) {
   const [hoveredBar, setHoveredBar] = useState(null);
-  const { buckets } = computeTimeline(notes);
+  const now = Date.now();
+  const { buckets } = computeTimeline(notes, now);
+  const chartNotes = notes.filter((note) => {
+    const ageMs = now - note.createdAt;
+    return ageMs >= 0 && ageMs < NOTE_LIFETIME_MS;
+  });
+  const dominantMood = computeDominantMood(chartNotes);
 
-  // Compute maximum count to scale the Y-axis accurately
   let highestMoodCount = 0;
   for (const b of buckets) {
     for (const mc of b.moodCounts) {
       if (mc.count > highestMoodCount) highestMoodCount = mc.count;
     }
   }
-  // Minimum scale of 2 so ticks match the reference image (2, 1, 0)
   const maxCount = Math.max(2, highestMoodCount);
 
-  // Generate integer ticks for Y-axis (e.g. [2, 1])
   const yTicks = Array.from({ length: maxCount }, (_, i) => maxCount - i);
 
   return (
     <section className="scrapbook-board-container" aria-label="Mood Frequency Scrapbook Board">
-      {/* Bulldog / Binder Clips */}
       <div className="scrapbook-binder-clip scrapbook-binder-clip--left" aria-hidden="true">
         <svg viewBox="0 0 38 52" width="34" height="48" fill="none" style={{ overflow: "visible" }}>
           <path
@@ -66,20 +69,25 @@ export default function Timeline({ notes }) {
         </svg>
       </div>
 
-      {/* Main Torn Notepad Sheet */}
       <div className="scrapbook-board">
-        {/* Board Header: Dymo Title + Clean Horizontal Legend */}
         <div className="scrapbook-board-header">
           <h2 className="dymo-label">MOOD FREQUENCY</h2>
 
-          {/* Clean Mood Legend */}
           <div className="scrapbook-legend-row" role="list" aria-label="Mood category legend">
             {MOODS.map((mood) => (
               <div key={mood.name} className="scrapbook-legend-item" role="listitem">
                 <span
                   className="scrapbook-legend-dot"
                   style={{ backgroundColor: mood.hex }}
-                />
+                >
+                  {dominantMood === mood.name && (
+                    <i
+                      className="ti ti-crown scrapbook-legend-crown"
+                      title="Dominant vibe"
+                      aria-label="Dominant vibe"
+                    />
+                  )}
+                </span>
                 <span className="scrapbook-legend-text">
                   {mood.label}
                 </span>
@@ -88,9 +96,7 @@ export default function Timeline({ notes }) {
           </div>
         </div>
 
-        {/* Chart Layout: Y-Axis on left, Plot area on right */}
         <div className="scrapbook-chart-wrapper">
-          {/* Y-Axis Count Labels */}
           <div className="scrapbook-y-axis" aria-hidden="true">
             {yTicks.map((tick) => (
               <span key={tick} className="scrapbook-y-label">
@@ -100,9 +106,7 @@ export default function Timeline({ notes }) {
             <span className="scrapbook-y-label scrapbook-y-label--zero">0</span>
           </div>
 
-          {/* Chart Canvas Stage */}
           <div className="scrapbook-chart-stage">
-            {/* Horizontal Dashed Gridlines */}
             <div className="scrapbook-gridlines" aria-hidden="true">
               {yTicks.map((tick) => {
                 const topPct = ((maxCount - tick) / maxCount) * 100;
@@ -117,11 +121,9 @@ export default function Timeline({ notes }) {
               <div className="scrapbook-gridline scrapbook-gridline--baseline" />
             </div>
 
-            {/* Bars Columns */}
             <div className="scrapbook-chart-cols">
               {buckets.map((bucket, bucketIdx) => (
                 <div key={bucket.bucketIndex} className="scrapbook-chart-col">
-                  {/* Cluster of 3 bars (Pink, Blue, Yellow) */}
                   <div className="scrapbook-bars-cluster">
                     {bucket.moodCounts.map((item, moodIdx) => {
                       const heightPct =
@@ -174,7 +176,6 @@ export default function Timeline({ notes }) {
                     })}
                   </div>
 
-                  {/* Column Label */}
                   <span
                     className={`scrapbook-col-label ${
                       bucket.isCurrent ? "scrapbook-col-label--now" : ""
