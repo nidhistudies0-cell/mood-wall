@@ -15,15 +15,11 @@ export default function NoteCard({ note, userReaction, onReact }) {
 
   const isBlue =
     mood.name === "Low Power" ||
-    mood.name === "Mall Haul" ||
-    note.color === "#34CDFC" ||
-    note.color === "#33CCFF";
+    note.color === "#34CDFC";
 
   const isYellow =
     mood.name === "Tiny Crisis" ||
-    mood.name === "Y2K Eve" ||
-    note.color === "#FFE359" ||
-    note.color === "#FFD600";
+    note.color === "#FFE359";
 
   function renderReactionButtons() {
     return (

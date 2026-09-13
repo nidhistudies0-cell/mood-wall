@@ -33,8 +33,7 @@ export function computeDominantMood(notes) {
 
   const counts = {};
   for (const note of notes) {
-    const mood = note.mood ?? note.moodName;
-    counts[mood] = (counts[mood] || 0) + 1;
+    counts[note.moodName] = (counts[note.moodName] || 0) + 1;
   }
 
   const entries = Object.entries(counts);
