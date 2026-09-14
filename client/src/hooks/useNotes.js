@@ -1,25 +1,41 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { API_BASE, NOTE_LIFETIME_MS, POLL_INTERVAL_MS } from "../config.js";
 
-export function useNotes(userId, recordReaction) {
+export function useNotes(recordReaction) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState(null);
+  const shuffleSeedRef = useRef(Math.random());
 
   const fetchNotes = useCallback(async () => {
-    try {
-      const res = await fetch(API_BASE);
-      if (!res.ok) throw new Error("Failed to load the wall.");
-      const data = await res.json();
-      setNotes(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  try {
+    const res = await fetch(API_BASE, { credentials: "include" });
+    if (!res.ok) throw new Error("Failed to load the wall.");
+    const data = await res.json();
+
+    const hashString = (str) => {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) {
+        h = (h * 31 + str.charCodeAt(i)) | 0; 
+      }
+      return h;
+    };
+
+    const ord = [...data].sort((a, b) => {
+      const hashA = hashString(a.id + shuffleSeedRef.current);
+      const hashB = hashString(b.id + shuffleSeedRef.current);
+      return hashA - hashB;
+    });
+
+    setNotes(ord);
+    setError(null);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     fetchNotes();
@@ -32,6 +48,7 @@ export function useNotes(userId, recordReaction) {
     try {
       const res = await fetch(API_BASE, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status, color, moodName }),
       });
@@ -50,9 +67,10 @@ export function useNotes(userId, recordReaction) {
     try {
       const res = await fetch(`${API_BASE}/${id}/react`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reaction, userId }),
-      });
+        body: JSON.stringify({ reaction }),
+});
       if (!res.ok) throw new Error("Couldn't react to that note.");
       const updated = await res.json();
       setNotes((prev) => prev.map((n) => (n.id === updated.id ? updated : n)));

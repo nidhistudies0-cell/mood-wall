@@ -80,7 +80,7 @@ export default function Timeline({ notes }) {
                   className="scrapbook-legend-dot"
                   style={{ backgroundColor: mood.hex }}
                 >
-                  {dominantMood === mood.name && (
+                    {dominantMood?.includes(mood.name) && (
                     <i
                       className="ti ti-crown scrapbook-legend-crown"
                       title="Dominant vibe"

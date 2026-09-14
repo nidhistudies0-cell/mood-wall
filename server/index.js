@@ -118,11 +118,11 @@ app.post("/api/notes/:id/react", async (req, res) => {
         );
       }
       await client.query(
-        `INSERT INTO note_reactions (note_id, user_key, reaction) VALUES ($1, $2, $3)
-         ON CONFLICT (note_id, user_key) DO UPDATE SET reaction = $3`,
-        [id, userKey, reaction]
-      );
-      await client.query(
+   `INSERT INTO note_reactions (note_id, user_key, reaction) VALUES ($1, $2, $3)
+          ON CONFLICT (user_key) DO UPDATE SET reaction = $3, note_id = $1`,
+  [id, userKey, reaction]
+);
+  await client.query(
         `UPDATE notes SET reactions = jsonb_set(reactions, ARRAY[$2], (COALESCE((reactions->>$2)::int,0)+1)::text::jsonb) WHERE id = $1`,
         [id, reaction]
       );

@@ -32,10 +32,10 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
     if (!status.trim()) return;
 
     onPost({
-      status: status.trim(),
-      color: selectedMood.hex,
-      moodName: selectedMood.name,
-    });
+  status: status.trim(),
+  color: MOODS[0].hex,
+  moodName: selectedMood.name,
+  });
     setStatus("");
     onClose();
   }
@@ -104,7 +104,7 @@ export default function PostMoodModal({ isOpen, onClose, onPost, posting, initia
             className="scrapbook-submit-btn"
             disabled={posting || !status.trim()}
           >
-            {posting ? "PINNING..." : "STICK TO WALL ↗"}
+            {posting ? "PINNING..." : "STICK TO WALL "}
           </button>
         </form>
       </div>

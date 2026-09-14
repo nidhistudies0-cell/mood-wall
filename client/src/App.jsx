@@ -12,12 +12,8 @@ export default function App() {
   const [modalMood, setModalMood] = useState(null);
   const [viewMode, setViewMode] = useState("wall"); 
 
-  const { userId, userReactions, recordReaction } = useUserIdentity();
-  const { activeNotes, loading, posting, error, handlePost, handleReact } = useNotes(
-    userId,
-    recordReaction
-  );
-
+ const { userReactions, recordReaction } = useUserIdentity();
+  const { activeNotes, loading, posting, error, handlePost, handleReact } = useNotes(recordReaction);
   const handleOpenPostModal = (moodName) => {
     setModalMood(moodName || null);
     setIsModalOpen(true);

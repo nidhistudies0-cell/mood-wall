@@ -19,17 +19,17 @@ export function useUserIdentity() {
   });
 
   const recordReaction = (noteId, reaction) => {
-    setUserReactions((prev) => {
-      const next = { ...prev };
-      if (reaction) {
-        next[noteId] = reaction;
-      } else {
-        delete next[noteId];
-      }
-      localStorage.setItem("vibe_user_reactions", JSON.stringify(next));
-      return next;
-    });
-  };
+  setUserReactions((prev) => {
+    const next = { ...prev };
+    if (reaction) {
+      next[noteId] = reaction;
+    } else {
+      delete next[noteId];
+    }
+    localStorage.setItem("vibe_user_reactions", JSON.stringify(next));
+    return prev; 
+  });
+};
 
   return { userId, userReactions, recordReaction };
 }

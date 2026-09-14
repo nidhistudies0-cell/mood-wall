@@ -40,7 +40,7 @@ export function computeDominantMood(notes) {
   const topCount = Math.max(...entries.map(([, count]) => count));
   const topMoods = entries.filter(([, count]) => count === topCount);
 
-  if (topMoods.length > 1) return null;
+  if (topMoods.length > 1) return topMoods.map(([name]) => name); 
   return topMoods[0][0];
 }
 
@@ -65,18 +65,18 @@ export function computeTimeline(notes, now = Date.now()) {
   });
 
   for (const note of notes) {
-    const ageMs = now - note.createdAt;
-    if (ageMs < 0 || ageMs >= BUCKET_COUNT * BUCKET_MS) continue;
-    const bucketIndex = Math.floor(ageMs / BUCKET_MS);
-    if (bucketIndex >= 0 && bucketIndex < BUCKET_COUNT) {
-      rawBuckets[bucketIndex].notes.push(note);
-      const mood = note.moodName;
-      rawBuckets[bucketIndex].counts.set(
-        mood,
-        (rawBuckets[bucketIndex].counts.get(mood) || 0) + 1
-      );
-    }
+  const ageMs = now - note.createdAt;
+  if (ageMs < 0) continue; 
+  const bucketIndex = Math.min(BUCKET_COUNT - 1, Math.floor(ageMs / BUCKET_MS)); 
+  if (bucketIndex >= 0 && bucketIndex < BUCKET_COUNT) {
+    rawBuckets[bucketIndex].notes.push(note);
+    const mood = note.moodName;
+    rawBuckets[bucketIndex].counts.set(
+      mood,
+      (rawBuckets[bucketIndex].counts.get(mood) || 0) + 1
+    );
   }
+}
 
   const buckets = rawBuckets
     .map((bucket) => {
